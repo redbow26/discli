@@ -1,5 +1,5 @@
 {
-  "name": "discli",
+  "name": "@redbow26/discli",
   "version": "1.0.0",
   "description": "A discord js cli tool, support javascript and typescript",
   "main": "./lib/index.js",
