@@ -9,7 +9,7 @@ Currently supports JavaScript and TypeScript.
 
 # Instructions
 
-Install discli by running `npm install -g discli` on your terminal or Windows CMD. This will install discli globally.
+Install discli by running `npm i @redbow26/discli` on your terminal or Windows CMD. This will install discli globally.
 
 - To create a project, type `discli`, or simply type `discli new <name of project>`
 
