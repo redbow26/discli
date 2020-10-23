@@ -29,7 +29,7 @@ import {
   generateTemplates,
   generateTSTemplates,
   modifyPackageJSONFile,
-  createCommandFile,
+  createTemplateCommandFile,
   createEventFile,
   createProjectDetailsFile,
   getFile,
@@ -37,7 +37,9 @@ import {
   createGitignoreFile,
   initializeGit,
   gitInitAdd,
-  gitInitCommit, initializeYARN,
+  gitInitCommit,
+  initializeYARN,
+  createTemplateEventFile,
 } from './filesystem';
 import { getEnvTemplate, getMainFile, getMainFileTS } from './templates/templates';
 import { capitalize } from './utils';
@@ -134,10 +136,10 @@ export async function createNewProject(name: string, language: string) {
   }
 }
 
-export async function generateNewCommand(commandName: string, category: string) {
+export async function generateNewTemplateCommand(commandName: string, category: string) {
   const discliFile = path.join(dir, 'discli.json');
-  const fileExists = await exists(discliFile);
-  if (fileExists) {
+  const discliFileExists = await exists(discliFile);
+  if (discliFileExists) {
     const { language } = await getFile(discliFile);
     // Check the language
     // Check if commands folder has category.
@@ -149,11 +151,12 @@ export async function generateNewCommand(commandName: string, category: string) 
       const commandFile = language === 'js' ? `${capitalize(commandName)}Command.js` : `${capitalize(commandName)}Command.ts`;
       const commandFilePath = path.join(commandsPath, commandFile);
       const commandExists = await exists(commandFilePath);
-      if (!commandExists) return createCommandFile(commandsPath, commandName, category, language);
+      // eslint-disable-next-line max-len
+      if (!commandExists) return createTemplateCommandFile(commandsPath, commandName, category, language);
       throw new Error(`Command already exists. ${commandFile}`);
     }
     await createDirectory(commandsPath);
-    return createCommandFile(commandsPath, commandName, category, language);
+    return createTemplateCommandFile(commandsPath, commandName, category, language);
   } throw new Error('Not a discli project');
 }
 
@@ -181,4 +184,27 @@ export async function generateNewEvent(eventsArray: Array<string>) {
   } catch (err) {
     console.log(err);
   }
+}
+
+export async function generateNewTemplateEvent(eventName: string, category: string) {
+  const discliFile = path.join(dir, 'discli.json');
+  const discliFileExists = await exists(discliFile);
+  if (discliFileExists) {
+    const { language } = await getFile(discliFile);
+    // Check the language
+    // Check if events folder has category.
+    // if it exists, create it in there, if not, create folder.
+    const eventsPath = path.join(dir, 'src', 'event', category);
+    const categoryExists = await exists(eventsPath);
+    if (categoryExists) {
+      // Check if event already exists.
+      const eventFile = language === 'js' ? `${capitalize(eventName)}Event.js` : `${capitalize(eventName)}Event.ts`;
+      const eventFilePath = path.join(eventsPath, eventFile);
+      const eventExists = await exists(eventFilePath);
+      if (!eventExists) return createTemplateEventFile(eventsPath, eventName, language);
+      throw new Error(`Event already exists. ${eventFile}`);
+    }
+    await createDirectory(eventsPath);
+    return createTemplateCommandFile(eventsPath, eventName, category, language);
+  } throw new Error('Not a discli project');
 }

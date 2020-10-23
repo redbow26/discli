@@ -103,7 +103,7 @@ export const getGit: Array<PromptObject> = [
   },
 ];
 
-export const templateGenerate: Array<PromptObject> = [
+export const templateCommandGenerator: Array<PromptObject> = [
   {
     type: 'text',
     name: 'name',
@@ -176,5 +176,30 @@ export const eventGenerate: Array<PromptObject> = [
       { title: 'WEBHOOK_UPDATE', value: 'webhookUpdate' },
     ],
     hint: '- Space to select. Return to submit',
+  },
+];
+
+export const eventSelect: Array<PromptObject> = [
+  {
+    type: 'select',
+    name: 'eventCustom',
+    message: 'Do you want to generate custom base event ?',
+    choices: [
+      { title: 'Yes', value: 'yes' },
+      { title: 'No', value: 'no' },
+    ],
+  },
+];
+
+export const templateEventGenerator: Array<PromptObject> = [
+  {
+    type: 'text',
+    name: 'name',
+    message: 'Enter the name of the event',
+  },
+  {
+    type: 'text',
+    name: 'category',
+    message: 'Enter the category of the event',
   },
 ];

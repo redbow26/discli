@@ -4,13 +4,14 @@ import prompts from 'prompts';
 import { Constants, Type } from './constants';
 import {
   createNewProject,
-  generateNewCommand,
+  generateNewTemplateCommand,
   generateNewEvent,
+  generateNewTemplateEvent,
 } from './scaffold';
 import {
-  templateGenerate,
+  templateCommandGenerator,
   eventGenerate,
-  languageSelect,
+  languageSelect, eventSelect, templateEventGenerator,
 } from './questions';
 
 export async function handleOption(option: string, data: string) {
@@ -20,13 +21,19 @@ export async function handleOption(option: string, data: string) {
     await createNewProject(data, language);
   } else if (option === Constants.GEN) {
     if (data === Type.COMMAND) {
-      const { name, category } = await prompts(templateGenerate);
-      await generateNewCommand(name, category)
+      const { name, category } = await prompts(templateCommandGenerator);
+      await generateNewTemplateCommand(name, category)
         .then(() => console.log('Created.'))
         .catch((err) => console.log(err));
     } else if (data === Type.EVENT) {
-      const { events } = await prompts(eventGenerate);
-      await generateNewEvent(events);
+      const { eventCustom } = await prompts(eventSelect);
+      if (eventCustom === 'yes') {
+        const { name, category } = await prompts(templateEventGenerator);
+        await generateNewTemplateEvent(name, category);
+      } else if (eventCustom === 'no') {
+        const { events } = await prompts(eventGenerate);
+        await generateNewEvent(events);
+      }
     }
   }
 }

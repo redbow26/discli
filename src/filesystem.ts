@@ -10,6 +10,8 @@ import {
   getCheckFailedEventTS,
   getCommandTemplate,
   getCommandTemplateTS,
+  getEventTemplate,
+  getEventTemplateTS,
   getHasPermissionsCheckTS,
   getIsGuildOwnerCheckTS,
   getIsOwnerCheckTS,
@@ -125,7 +127,7 @@ export async function generateTSTemplates(filePath: string) {
   }
 }
 
-export async function createCommandFile(
+export async function createTemplateCommandFile(
   filePath: string,
   name: string,
   category: string,
@@ -134,6 +136,16 @@ export async function createCommandFile(
   return language === 'js'
     ? fs.writeFile(path.join(filePath, `${capitalize(name)}Command.js`), getCommandTemplate(name, category))
     : fs.writeFile(path.join(filePath, `${capitalize(name)}Command.ts`), getCommandTemplateTS(name, category));
+}
+
+export async function createTemplateEventFile(
+  filePath: string,
+  name: string,
+  language: string,
+) {
+  return language === 'js'
+    ? fs.writeFile(path.join(filePath, `${capitalize(name)}Command.js`), getEventTemplate(name))
+    : fs.writeFile(path.join(filePath, `${capitalize(name)}Command.ts`), getEventTemplateTS(name));
 }
 
 export async function createEventFile(filePath: string, template: string) {

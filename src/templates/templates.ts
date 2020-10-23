@@ -461,6 +461,34 @@ export default class ${capitalize(name)}Command extends BaseCommand {
 }`;
 }
 
+export function getEventTemplate(name: string) {
+  return `const BaseEvent = require('../../utils/structures/BaseCommand');
+
+module.exports = class ${capitalize(name)}Command extends BaseEvent {
+  constructor() {
+    super('${name}');
+  }
+
+  run(client) {
+  }
+}`;
+}
+
+export function getEventTemplateTS(name: string) {
+  return `import { Message } from 'discord.js';
+import BaseEvent from '../../utils/structures/BaseCommand';
+import DiscordClient from '../../client/client';
+
+export default class ${capitalize(name)}Command extends BaseEvent {
+  constructor() {
+    super('${name}');
+  }
+
+  async run(client: DiscordClient) {
+  }
+}`;
+}
+
 export function getCheckTemplateTS(name: string) {
   return `import DiscordClient from "../../client/client";
 import {Message} from "discord.js";
